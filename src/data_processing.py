@@ -3,6 +3,10 @@
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+import time
+
+# Start the timer (data creation purposes only)
+start_time = time.time()
 
 # Set a random seed for reproducibility
 np.random.seed(0)
@@ -52,5 +56,12 @@ filepath = "D:\\datasets\\github_credit_risk_modeling_data\\credit_risk_data.csv
 
 # Save the DataFrame to the processed data folder
 credit_risk_data.to_csv(filepath, index=False)
+
+# End the timer (data creation purposes only)
+end_time = time.time()
+
+# Calculate and print the elapsed time
+elapsed_time = end_time - start_time
+print(f"Data generation and saving completed in {elapsed_time:.2f} seconds.")
 
 print(f"Data has been generated and saved to {filepath}.")
