@@ -68,5 +68,17 @@ credit_risk_data.to_csv(filepath, index=False)
 end_time = time.time()
 elapsed_time = end_time - start_time
 
-print(f"Data generation and saving completed in {elapsed_time:.2f} seconds.")
+# Convert elapsed time to hours, minutes, and seconds
+hours = int(elapsed_time // 3600) # integer division to get whole hours (not 'true division')
+minutes = int((elapsed_time % 3600) // 60)
+seconds = elapsed_time % 60
+
+# Print the time in a readable format
+if hours > 0:
+    print(f"Data generation and saving completed in {hours} hours, {minutes} minutes, and {seconds:.2f} seconds.")
+elif minutes > 0:
+    print(f"Data generation and saving completed in {minutes} minutes and {seconds:.2f} seconds.")
+else:
+    print(f"Data generation and saving completed in {seconds:.2f} seconds.")
+
 print(f"Data has been generated and saved to {filepath}.")
