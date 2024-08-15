@@ -5,36 +5,6 @@ A project to evaluate and predict credit risk using machine learning models, wit
 
 This project aims to evaluate and predict credit risk using machine learning models. The primary goal is to build a model that can assess the likelihood of an individual defaulting on a loan based on features like age, income, and loan amount. This project demonstrates the application of data science and machine learning techniques to a common problem in finance.
 
-## Project Structure
-Credit-Risk-Modeling/
-│
-├── data/
-│ ├── raw/ # Raw datasets (e.g., CSV files, Excel files)
-│ ├── processed/ # Processed datasets after cleaning and feature engineering
-│ └── README.md # Description of data sources and data dictionaries
-│
-├── notebooks/
-│ ├── 01_eda.ipynb # Exploratory Data Analysis (EDA)
-│ ├── 02_feature_engineering.ipynb # Feature selection and engineering
-│ ├── 03_model_training.ipynb # Model training and evaluation
-│ └── 04_model_tuning.ipynb # Model tuning and optimization
-│
-├── src/
-│ ├── data_processing.py # Scripts for data cleaning and preprocessing
-│ ├── feature_engineering.py # Scripts for feature engineering
-│ ├── model_building.py # Scripts for building and training models
-│ ├── evaluation.py # Scripts for evaluating models
-│ └── utils.py # Utility functions
-│
-├── reports/
-│ ├── figures/ # Visualizations and plots
-│ └── report.md # Final report with model performance and insights
-│
-├── .gitignore # Files and directories to ignore in GitHub
-├── README.md # Project overview, methodology, and findings
-└── requirements.txt # List of Python dependencies
-
-
 ## Installation
 
 To replicate this project, you'll need to clone the repository and install the required Python packages. You can do this as follows:
