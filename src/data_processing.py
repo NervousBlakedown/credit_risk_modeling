@@ -1,5 +1,3 @@
-# src/data_processing.py
-# Imports
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
@@ -11,7 +9,7 @@ start_time = time.time()
 # Set a random seed for reproducibility
 np.random.seed(0)
 
-# Define N number of samples to simulate number of financial customers
+# Define N number of samples to simulate the number of financial customers
 n_samples = 20_000_000
 
 # Create the customer_id array separately and ensure its length matches n_samples
@@ -22,13 +20,13 @@ while len(customer_id) < n_samples:
     additional_ids = np.unique(np.random.randint(1000, 198234870, n_samples - len(customer_id)))
     customer_id = np.concatenate((customer_id, additional_ids))
 
-# Create a dictionary for dataset
+# Generate structured random data
 data = {
-    'customer_id': customer_id[:n_samples],  # Trim to exactly n_samples if needed
+    'customer_id': customer_id[:n_samples],
     'age': np.random.randint(18, 85, n_samples),
     'gender': np.random.choice(['Male', 'Female', 'Other'], n_samples),
     'marital_status': np.random.choice(['Single', 'Married', 'Divorced', 'Widowed'], n_samples),
-    'dependents': np.random.randint(0, 9, n_samples),
+    'dependents': np.random.randint(0, 5, n_samples),
     'employment_status': np.random.choice(['Employed', 'Unemployed', 'Self-employed', 'Retired'], n_samples),
     'annual_income': np.random.randint(20_000, 1_000_000, n_samples),
     'loan_amount': np.random.randint(5000, 1_000_000, n_samples),
@@ -40,28 +38,35 @@ data = {
     'debt_to_income_ratio': np.round(np.random.uniform(0.01, 0.5, n_samples), 2),
     'delinquencies': np.random.randint(0, 10, n_samples),
     'credit_history_length': np.random.randint(0, 40, n_samples),
-    'default': np.random.randint(0, 2, n_samples),  # 0 for repaid, 1 for default
-    'default_amount': np.random.randint(0, 1_000_000, n_samples),  # If default, amount defaulted
-    'repayment_tenure': np.random.randint(1, 360, n_samples)  # Number of months before default (if applicable)
 }
 
-# Show progress during DataFrame creation
-credit_risk_data = pd.DataFrame({key: tqdm(value, desc=key) for key, value in data.items()})
+# Introduce a probabilistic relationship between income, loan amount, credit score, and default
+default_prob = (
+    (data['loan_amount'] / data['annual_income']) * 0.5 + 
+    (700 - data['credit_score']) * 0.001 +
+    data['debt_to_income_ratio'] * 2
+)
+default_prob = np.clip(default_prob, 0, 1)  # Ensure probabilities are between 0 and 1
 
-# Create DataFrame from dictionary
-# credit_risk_data = pd.DataFrame(data)
+# Generate the default column based on the probability
+data['default'] = np.random.binomial(1, default_prob, n_samples)
+
+# Generate the default_amount based on whether the customer defaulted
+data['default_amount'] = np.where(data['default'] == 1, np.random.randint(0, 1_000_000, n_samples), 0)
+
+# Add repayment_tenure based on default and loan term
+data['repayment_tenure'] = np.where(data['default'] == 1, np.random.randint(1, 360, n_samples), data['loan_term'] * 12)
+
+# Create DataFrame
+credit_risk_data = pd.DataFrame({key: tqdm(value, desc=key) for key, value in data.items()})
 
 # Save dataset to HDD
 filepath = "D:\\datasets\\github_credit_risk_modeling_data\\credit_risk_data.csv"
-
-# Save the DataFrame to the processed data folder
 credit_risk_data.to_csv(filepath, index=False)
 
 # End the timer (data creation purposes only)
 end_time = time.time()
-
-# Calculate and print the elapsed time
 elapsed_time = end_time - start_time
-print(f"Data generation and saving completed in {elapsed_time:.2f} seconds.")
 
+print(f"Data generation and saving completed in {elapsed_time:.2f} seconds.")
 print(f"Data has been generated and saved to {filepath}.")
